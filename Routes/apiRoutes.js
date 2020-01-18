@@ -1,16 +1,21 @@
 const router = require('express').Router();
 const fs = require('fs');
-const obj = require('../Develop/db/db.json')
+const path = require('path');
+// const obj = require('../Develop/db/db.json')
 
 router.get("/notes", (Request, Response) => {
-  console.log(obj);
-  Response.json(obj);
+  // console.log(obj);
+  const data = getDataBase();
+  Response.json(data);
 });
 
 //post
 router.post("/notes", (Request, Response) => {
   const leData = Request.body
-  obj.push(leData)
+  const data = getDataBase();
+  leData.id = Math.random();
+  data.push(leData)
+  saveDataBase(data)
   Response.json(leData)
   console.log(leData)
 });
@@ -18,15 +23,20 @@ router.post("/notes", (Request, Response) => {
 //delete
 router.delete("/notes/:id", (Request, Response) => {
   const leData = Request.body
-  Response.delete(leData)
-  .then(leData) => {
-    console.log(leData);
-  }
+  const notes = getDataBase();
+  const result = notes.filter(note => note.id != Request.params.id);
+  saveDataBase(result);
+  Response.send();
 });
 
 module.exports = router;
 
-delete myObject[':id'];
-// OR delete myObject.currentIndustry;
-  
-console.log(myObject);
+function getDataBase() {
+  const json = fs.readFileSync(path.join(__dirname, "../db/db.json")) 
+  return JSON.parse(json);
+}
+
+function saveDataBase(newData) {
+  return fs.writeFileSync(path.join(__dirname, "../db/db.json"), JSON.stringify(newData))
+}
+

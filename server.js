@@ -13,7 +13,6 @@ app.use(express.static('public'));
 app.use('/api', apiRoutes);
 app.use('/', htmlRoutes);
 
-
-  app.listen(PORT, function() {
+app.listen(PORT, function() {
     console.log(`App running on http://localhost:${PORT}`);
   });
