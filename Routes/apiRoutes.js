@@ -1,45 +1,32 @@
-var path = require("path");
+const router = require('express').Router();
+const fs = require('fs');
+const obj = require('../Develop/db/db.json')
 
-var tableData = require("../data/tableData");
+router.get("/notes", (Request, Response) => {
+  console.log(obj);
+  Response.json(obj);
+});
 
-module.exports = function(app){
+//post
+router.post("/notes", (Request, Response) => {
+  const leData = Request.body
+  obj.push(leData)
+  Response.json(leData)
+  console.log(leData)
+});
 
-app.get("/", function(req, res) {
-    // res.send("Welcome to the Star Wars Page!")
-    res.sendFile(path.join(__dirname, "../Public/main.html"));
-  });
+//delete
+router.delete("/notes/:id", (Request, Response) => {
+  const leData = Request.body
+  Response.delete(leData)
+  .then(leData) => {
+    console.log(leData);
+  }
+});
 
-  app.get("/tables", function(req, res) {
-    // res.send("Welcome to the Star Wars Page!")
-    res.sendFile(path.join(__dirname, "../Public/tables.html"));
-  });
+module.exports = router;
 
-  app.get("/reserve", function(req, res) {
-    // res.send("Welcome to the Star Wars Page!")
-    res.sendFile(path.join(__dirname, "../Public/reserve.html"));
-  });
+delete myObject[':id'];
+// OR delete myObject.currentIndustry;
   
-  // Displays all tableData 
-  app.get("/api/table", function(req, res) {
-    return res.json(tableData );
-  });
-
-  app.get("/api/waitList", function(req, res) {
-    return res.json(tableData );
-  });
-  
-  // Create New tableData  - takes in JSON input
-  app.post("/api/tables", function(req, res) {
-    // req.body hosts is equal to the JSON post sent from the user
-    // This works because of our body parsing middleware
-    var newtableData  = req.body;
-  
-    console.log(newtableData );
-  
-    // We then add the json the user sent to the character array
-    tableData .push(newtableData );
-  
-    // We then display the JSON to the users
-    res.json(newtableData );
-  });
-  };
+console.log(myObject);
